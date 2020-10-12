@@ -62,7 +62,7 @@ ProfileLink = https://gazelle******/user.php?id=5****
 * **SessionCookie** - Session cookie string. In chrome open dev console > Application > Expand Cookies (On the sidebar), click on AB/GGN URL and copy the `session` string value displayed.
 * **ProfileLink** - The URL of your profile in AB/GGN. Go to your profile page in AB/GGN to get this link.
 
-If you want more trackers supported, open a PR with the supported changes or chuck me an invite 🤣.
+If you want more trackers supported, open a PR with the supported tracker implemented or chuck me an invite 🤣.
 
 ### Executing program
 ```
