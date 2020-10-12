@@ -1,0 +1,6 @@
+config.ini
+__pycache__
+.idea/
+.python-version
+.venv/
+.vscode/
