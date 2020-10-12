@@ -1,8 +1,14 @@
 import configparser
+
+import humanfriendly
+
 from Utils import get_tracker
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 import logging
+
+logging.basicConfig(format='%(asctime)s [%(levelname)8s] - %(message)s', datefmt='%d-%b-%y %H:%M:%S',
+                    level=logging.DEBUG)
 
 config = configparser.RawConfigParser()
 config.read('config.ini')
@@ -18,22 +24,22 @@ for section in config.sections():
         if config[section].getboolean('Enabled'):
             trackerName = section.split('.')[1]
             tracker = get_tracker(trackerName, config[section])
-            print(f"[{trackerName}] Fetching stats.")
+            logging.info("Fetching stats for " + trackerName)
             try:
                 stats = tracker.get_stats()
             except Exception as e:
-                print(f"[{trackerName}] An error occurred while retrieving stats for this tracker.")
-                print(f"[{trackerName}] {str(e)}")
+                logging.error("An error occurred whilst retrieving stats for " + trackerName)
+                logging.error(e)
 
-            print(f"[{trackerName}] Ratio: {stats.ratio} Downloaded: {stats.download} Uploaded: {stats.upload}")
+            logging.info(f"({trackerName}) Ratio: {stats.ratio} Downloaded: {stats.download} ({humanfriendly.format_size(stats.download, binary=True)}) Uploaded: {stats.upload} ({humanfriendly.format_size(stats.upload, binary=True)})")
 
             p = Point("ratio").tag("tracker", trackerName).field("ratio", stats.ratio).field("download", stats.download).field("upload", stats.upload)
 
             try:
                 write_api.write(bucket=config['InfluxDB']['Database'], org='-' ,record=p)
             except Exception as e:
-                print("[InfluxDB] An error occurred while writing to Influxdb.")
-                print(f"[InfluxDB] {str(e)}")
-            print("[InfluxDB] Successfully written to InfluxDB")
+                logging.error("An error occurred while writing to Influxdb.")
+                logging.error(e)
+            logging.info("Successfully written to InfluxDB")
 
 

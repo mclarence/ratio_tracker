@@ -1,0 +1,4 @@
+beautifulsoup4==4.9.3
+humanfriendly==8.2
+influxdb-client==1.11.0
+requests==2.24.0
