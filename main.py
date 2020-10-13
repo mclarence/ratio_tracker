@@ -4,10 +4,11 @@ from Utils import get_tracker
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 import logging
+import sys
 from datetime import timezone
 from datetime import datetime
 logging.basicConfig(format='%(asctime)s [%(levelname)8s] - %(message)s', datefmt='%d-%b-%y %H:%M:%S',
-                    level=logging.DEBUG)
+                    level=logging.DEBUG, stream=sys.stdout)
 
 config = configparser.RawConfigParser()
 config.read('config.ini')
